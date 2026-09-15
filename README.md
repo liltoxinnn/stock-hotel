@@ -6,7 +6,9 @@ Interface entièrement en français, fonctionnement 100 % hors connexion.
 ## Fonctionnalités
 
 - Liste des produits avec la quantité en stock
-- Ajout au stock (`+`) et retrait du stock (`−`) en deux clics
+- Ajustement du stock directement dans la ligne avec `−` et `+`, puis
+  **Confirmer** : un seul mouvement est enregistré pour l'écart total
+- Double-clic sur la quantité pour la saisir au clavier
 - Création, modification et suppression de produits
 - Recherche instantanée (insensible à la casse et aux accents)
 - Historique des entrées et sorties, du plus récent au plus ancien
@@ -76,6 +78,7 @@ StockManager/
 ├── Services/          StockService (règles métier), DialogService, validation
 ├── ViewModels/        MVVM : pages et fenêtres
 ├── Views/             MainWindow, pages Stock / Historique / Paramètres, fenêtres
+├── Behaviors/         Propriétés attachées (saisie numérique, focus)
 ├── Converters/        Convertisseurs de liaison
 ├── Core/              ObservableObject, RelayCommand
 └── Resources/Styles/  Palette, pictogrammes, styles des contrôles
@@ -92,7 +95,8 @@ elle contient toutes les règles et tous les accès à la base de données.
 2. Toute modification du stock est enregistrée dans l'historique
    (produit, type, quantité, date).
 3. Les noms de produits sont obligatoires et uniques, sans tenir compte de la casse.
-4. Les quantités d'un mouvement sont des nombres entiers strictement positifs.
+4. Les quantités d'un mouvement sont des nombres entiers strictement positifs ;
+   l'ajustement en ligne ne peut pas descendre sous zéro.
 5. La suppression d'un produit demande une confirmation et retire également
    son historique de mouvements.
 6. Les données sont conservées à la fermeture de l'application.

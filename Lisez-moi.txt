@@ -27,8 +27,21 @@ UTILISATION
 -----------
 
 STOCK        La liste de vos produits et la quantite disponible.
-             Le bouton  +  ajoute au stock.
-             Le bouton  -  retire du stock.
+
+             Pour modifier un stock, utilisez les boutons  -  et  +
+             de la ligne : le nombre change immediatement a l'ecran,
+             en bleu. Rien n'est enregistre tant que vous n'avez pas
+             clique sur « Confirmer ».
+
+             Exemple : trois clics sur  +  affichent « Confirmer +3 ».
+             Un seul mouvement de +3 est alors ajoute a l'historique.
+
+             La croix a cote annule l'ajustement.
+
+             Pour une grosse quantite, double-cliquez sur le nombre :
+             vous pouvez alors le taper au clavier, puis valider avec
+             la touche Entree.
+
              Les boutons crayon et corbeille permettent de renommer
              ou de supprimer un produit.
 

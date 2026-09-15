@@ -8,10 +8,6 @@ namespace StockManager.Services;
 /// </summary>
 public interface IDialogService
 {
-    bool ShowAddStock(Product product);
-
-    bool ShowRemoveStock(Product product);
-
     bool ShowAddProduct();
 
     bool ShowEditProduct(Product product);

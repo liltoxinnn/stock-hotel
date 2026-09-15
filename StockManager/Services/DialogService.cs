@@ -21,12 +21,6 @@ public class DialogService : IDialogService
     /// <summary>Fenêtre principale, utilisée comme parente des fenêtres modales.</summary>
     public Window? Owner { get; set; }
 
-    public bool ShowAddStock(Product product)
-        => ShowDialog(new AddStockWindow(new AddStockViewModel(_stockService, product)));
-
-    public bool ShowRemoveStock(Product product)
-        => ShowDialog(new RemoveStockWindow(new RemoveStockViewModel(_stockService, product)));
-
     public bool ShowAddProduct()
         => ShowDialog(new AddProductWindow(new AddProductViewModel(_stockService)));
 

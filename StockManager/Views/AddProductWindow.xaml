@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:StockManager.ViewModels"
+        xmlns:behaviors="clr-namespace:StockManager.Behaviors"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=vm:AddProductViewModel}"
         Title="Ajouter un produit"
@@ -57,6 +58,7 @@
                        Margin="0,18,0,7" />
             <TextBox x:Name="QuantityBox"
                      Style="{StaticResource AppTextBoxStyle}"
+                     behaviors:NumericInput.DigitsOnly="True"
                      MaxLength="9"
                      Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" />
 

@@ -11,7 +11,6 @@ public partial class AddProductWindow : Window
         InitializeComponent();
         DialogWindow.Attach(this, viewModel);
 
-        NumericInput.Restrict(QuantityBox);
         Loaded += (_, _) => NameBox.Focus();
     }
 }

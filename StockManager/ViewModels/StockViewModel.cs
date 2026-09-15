@@ -28,8 +28,12 @@ public class StockViewModel : ObservableObject
         _dialogService = dialogService;
 
         AddProductCommand = new RelayCommand(AddProduct);
-        AddStockCommand = new RelayCommand(parameter => AddStock(parameter as ProductViewModel));
-        RemoveStockCommand = new RelayCommand(parameter => RemoveStock(parameter as ProductViewModel));
+        IncrementCommand = new RelayCommand(parameter => Adjust(parameter, product => product.Increment()));
+        DecrementCommand = new RelayCommand(parameter => Adjust(parameter, product => product.Decrement()));
+        ConfirmChangeCommand = new RelayCommand(parameter => ConfirmChange(parameter as ProductViewModel));
+        CancelChangeCommand = new RelayCommand(parameter => Adjust(parameter, product => product.CancelPending()));
+        BeginEditCommand = new RelayCommand(parameter => Adjust(parameter, product => product.BeginEdit()));
+        CommitEditCommand = new RelayCommand(parameter => Adjust(parameter, product => product.CommitEdit()));
         EditProductCommand = new RelayCommand(parameter => EditProduct(parameter as ProductViewModel));
         DeleteProductCommand = new RelayCommand(parameter => DeleteProduct(parameter as ProductViewModel));
         ClearSearchCommand = new RelayCommand(() => SearchText = string.Empty);
@@ -40,9 +44,17 @@ public class StockViewModel : ObservableObject
 
     public ICommand AddProductCommand { get; }
 
-    public ICommand AddStockCommand { get; }
+    public ICommand IncrementCommand { get; }
 
-    public ICommand RemoveStockCommand { get; }
+    public ICommand DecrementCommand { get; }
+
+    public ICommand ConfirmChangeCommand { get; }
+
+    public ICommand CancelChangeCommand { get; }
+
+    public ICommand BeginEditCommand { get; }
+
+    public ICommand CommitEditCommand { get; }
 
     public ICommand EditProductCommand { get; }
 
@@ -121,12 +133,18 @@ public class StockViewModel : ObservableObject
             .Select(product => new ProductViewModel(product, LowStockThreshold))
             .ToList();
 
-        ProductCount = _allProducts.Count;
-        TotalQuantity = _allProducts.Sum(product => product.Quantity);
-        LowStockCount = _allProducts.Count(product => product.NeedsAttention);
+        UpdateSummary();
 
         ApplyFilter();
         OnPropertyChanged(nameof(HasProducts));
+    }
+
+    /// <summary>Recalcule les trois indicateurs à partir de l'inventaire chargé.</summary>
+    private void UpdateSummary()
+    {
+        ProductCount = _allProducts.Count;
+        TotalQuantity = _allProducts.Sum(product => product.Quantity);
+        LowStockCount = _allProducts.Count(product => product.NeedsAttention);
     }
 
     private void ApplyFilter()
@@ -184,18 +202,41 @@ public class StockViewModel : ObservableObject
         }
     }
 
-    private void AddStock(ProductViewModel? product)
+    /// <summary>Applique un ajustement à une ligne, sans rien enregistrer.</summary>
+    private static void Adjust(object? parameter, Action<ProductViewModel> action)
     {
-        if (product is not null && _dialogService.ShowAddStock(product.Model))
+        if (parameter is ProductViewModel product)
         {
-            Refresh();
+            action(product);
         }
     }
 
-    private void RemoveStock(ProductViewModel? product)
+    /// <summary>
+    /// Enregistre l'ajustement en attente d'une ligne : un seul mouvement est
+    /// créé pour l'écart total (une entrée s'il est positif, une sortie sinon).
+    /// Les autres lignes conservent leur ajustement en cours.
+    /// </summary>
+    private void ConfirmChange(ProductViewModel? product)
     {
-        if (product is not null && _dialogService.ShowRemoveStock(product.Model))
+        if (product is null || !product.HasPendingChange)
         {
+            return;
+        }
+
+        var delta = product.Delta;
+
+        try
+        {
+            var saved = delta > 0
+                ? _stockService.AddStock(product.Id, delta)
+                : _stockService.RemoveStock(product.Id, -delta);
+
+            product.ApplySavedQuantity(saved.Quantity);
+            UpdateSummary();
+        }
+        catch (StockException exception)
+        {
+            _dialogService.ShowError(exception.Message);
             Refresh();
         }
     }

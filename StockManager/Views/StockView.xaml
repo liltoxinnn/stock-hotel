@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:StockManager.ViewModels"
+             xmlns:behaviors="clr-namespace:StockManager.Behaviors"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:StockViewModel}">
 
@@ -141,15 +142,14 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="130" />
-                                <ColumnDefinition Width="176" />
+                                <ColumnDefinition Width="190" />
+                                <ColumnDefinition Width="210" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="PRODUIT" Style="{StaticResource TableHeaderStyle}" />
                             <TextBlock Grid.Column="1"
                                        Text="STOCK"
                                        Style="{StaticResource TableHeaderStyle}"
-                                       HorizontalAlignment="Right"
-                                       Margin="0,0,24,0" />
+                                       HorizontalAlignment="Center" />
                             <TextBlock Grid.Column="2"
                                        Text="ACTIONS"
                                        Style="{StaticResource TableHeaderStyle}"
@@ -165,8 +165,8 @@
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="130" />
-                                            <ColumnDefinition Width="176" />
+                                            <ColumnDefinition Width="190" />
+                                            <ColumnDefinition Width="210" />
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Nom du produit -->
@@ -194,62 +194,134 @@
                                             </Border>
                                         </StackPanel>
 
-                                        <!-- Quantité en stock -->
-                                        <TextBlock x:Name="QuantityText"
-                                                   Grid.Column="1"
-                                                   Text="{Binding Quantity}"
-                                                   FontSize="18"
-                                                   FontWeight="Bold"
-                                                   Foreground="{StaticResource TextPrimaryBrush}"
-                                                   HorizontalAlignment="Right"
-                                                   VerticalAlignment="Center"
-                                                   Margin="0,0,24,0" />
-
-                                        <!-- Actions -->
-                                        <StackPanel Grid.Column="2"
+                                        <!-- Quantité : − / nombre / + -->
+                                        <StackPanel Grid.Column="1"
                                                     Orientation="Horizontal"
-                                                    HorizontalAlignment="Right">
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
 
                                             <Button Style="{StaticResource RemoveStockButtonStyle}"
-                                                    Command="{Binding DataContext.RemoveStockCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    ToolTip="Retirer une unité"
+                                                    Command="{Binding DataContext.DecrementCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding}">
                                                 <Path Style="{StaticResource IconStyleSmall}"
                                                       Data="{StaticResource IconMinus}"
                                                       Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
                                             </Button>
 
+                                            <!-- Double-clic : saisie de la quantité au clavier -->
+                                            <Grid Width="64"
+                                                  Height="36"
+                                                  Margin="8,0"
+                                                  Background="Transparent"
+                                                  Cursor="Hand"
+                                                  ToolTip="Double-cliquez pour saisir la quantité">
+                                                <Grid.InputBindings>
+                                                    <MouseBinding MouseAction="LeftDoubleClick"
+                                                                  Command="{Binding DataContext.BeginEditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                  CommandParameter="{Binding}" />
+                                                </Grid.InputBindings>
+
+                                                <TextBlock x:Name="QuantityText"
+                                                           Text="{Binding PendingQuantity}"
+                                                           FontSize="18"
+                                                           FontWeight="Bold"
+                                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           Visibility="{Binding IsEditing, Converter={StaticResource InverseBoolToVisibility}}" />
+
+                                                <TextBox Style="{StaticResource AppTextBoxStyle}"
+                                                         Height="36"
+                                                         FontSize="15"
+                                                         FontWeight="Bold"
+                                                         Padding="4,0"
+                                                         TextAlignment="Center"
+                                                         MaxLength="7"
+                                                         behaviors:NumericInput.DigitsOnly="True"
+                                                         behaviors:FocusAttachment.IsFocused="{Binding IsEditing}"
+                                                         Text="{Binding EditText, UpdateSourceTrigger=PropertyChanged}"
+                                                         LostFocus="QuantityEditor_LostFocus"
+                                                         Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibility}}">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Key="Enter"
+                                                                    Command="{Binding DataContext.CommitEditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                    CommandParameter="{Binding}" />
+                                                        <KeyBinding Key="Escape"
+                                                                    Command="{Binding DataContext.CancelChangeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                    CommandParameter="{Binding}" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                            </Grid>
+
                                             <Button Style="{StaticResource AddStockButtonStyle}"
-                                                    Margin="8,0,0,0"
-                                                    Command="{Binding DataContext.AddStockCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    ToolTip="Ajouter une unité"
+                                                    Command="{Binding DataContext.IncrementCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding}">
                                                 <Path Style="{StaticResource IconStyleSmall}"
                                                       Data="{StaticResource IconPlus}"
                                                       Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
                                             </Button>
-
-                                            <Border Width="1"
-                                                    Margin="12,7,12,7"
-                                                    Background="{StaticResource SubtleBorderBrush}" />
-
-                                            <Button Style="{StaticResource GhostIconButtonStyle}"
-                                                    ToolTip="Modifier le produit"
-                                                    Command="{Binding DataContext.EditProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                    CommandParameter="{Binding}">
-                                                <Path Style="{StaticResource IconStyleSmall}"
-                                                      Data="{StaticResource IconEdit}"
-                                                      Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
-                                            </Button>
-
-                                            <Button Style="{StaticResource GhostDangerIconButtonStyle}"
-                                                    Margin="4,0,0,0"
-                                                    ToolTip="Supprimer le produit"
-                                                    Command="{Binding DataContext.DeleteProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                    CommandParameter="{Binding}">
-                                                <Path Style="{StaticResource IconStyleSmall}"
-                                                      Data="{StaticResource IconDelete}"
-                                                      Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
-                                            </Button>
                                         </StackPanel>
+
+                                        <!-- Actions : modifier / supprimer, ou valider l'ajustement -->
+                                        <Grid Grid.Column="2">
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Center"
+                                                        Visibility="{Binding HasNoPendingChange, Converter={StaticResource BoolToVisibility}}">
+                                                <Button Style="{StaticResource GhostIconButtonStyle}"
+                                                        ToolTip="Modifier le produit"
+                                                        Command="{Binding DataContext.EditProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}">
+                                                    <Path Style="{StaticResource IconStyleSmall}"
+                                                          Data="{StaticResource IconEdit}"
+                                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                                </Button>
+                                                <Button Style="{StaticResource GhostDangerIconButtonStyle}"
+                                                        Margin="4,0,0,0"
+                                                        ToolTip="Supprimer le produit"
+                                                        Command="{Binding DataContext.DeleteProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}">
+                                                    <Path Style="{StaticResource IconStyleSmall}"
+                                                          Data="{StaticResource IconDelete}"
+                                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                                </Button>
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Center"
+                                                        Visibility="{Binding HasPendingChange, Converter={StaticResource BoolToVisibility}}">
+                                                <Button Style="{StaticResource PrimaryButtonStyle}"
+                                                        Height="36"
+                                                        Padding="14,0"
+                                                        FontSize="12.5"
+                                                        ToolTip="Enregistrer ce mouvement de stock"
+                                                        Command="{Binding DataContext.ConfirmChangeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Path Style="{StaticResource IconStyleSmall}"
+                                                              Data="{StaticResource IconCheck}"
+                                                              Stroke="White"
+                                                              VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding ConfirmLabel}"
+                                                                   Margin="7,0,0,0"
+                                                                   VerticalAlignment="Center" />
+                                                    </StackPanel>
+                                                </Button>
+                                                <Button Style="{StaticResource GhostIconButtonStyle}"
+                                                        Margin="6,0,0,0"
+                                                        ToolTip="Annuler l'ajustement"
+                                                        Command="{Binding DataContext.CancelChangeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}">
+                                                    <Path Style="{StaticResource IconStyleSmall}"
+                                                          Data="{StaticResource IconClose}"
+                                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
                                     </Grid>
                                 </Border>
 
@@ -261,6 +333,11 @@
                                     <DataTrigger Binding="{Binding IsOutOfStock}" Value="True">
                                         <Setter TargetName="QuantityText" Property="Foreground"
                                                 Value="{StaticResource DangerBrush}" />
+                                    </DataTrigger>
+                                    <!-- Ajustement non enregistré : le nombre passe en bleu -->
+                                    <DataTrigger Binding="{Binding HasPendingChange}" Value="True">
+                                        <Setter TargetName="QuantityText" Property="Foreground"
+                                                Value="{StaticResource PrimaryBrush}" />
                                     </DataTrigger>
                                 </DataTemplate.Triggers>
                             </DataTemplate>
