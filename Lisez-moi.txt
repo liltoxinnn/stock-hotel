@@ -1,0 +1,59 @@
+GESTION DE STOCK
+================
+
+
+DEMARRAGE
+---------
+
+1. Decompressez l'archive dans le dossier de votre choix.
+2. Double-cliquez sur GestionDeStock.exe.
+
+Il n'y a rien a installer. L'application ne demande ni connexion
+internet, ni compte, ni logiciel supplementaire.
+
+Au tout premier lancement, Windows peut afficher un avertissement
+bleu « Windows a protege votre ordinateur ». C'est normal pour un
+programme telecharge : cliquez sur « Informations complementaires »,
+puis sur « Executer quand meme ».
+
+
+CONFIGURATION REQUISE
+---------------------
+
+Windows 10 ou Windows 11, version 64 bits.
+
+
+UTILISATION
+-----------
+
+STOCK        La liste de vos produits et la quantite disponible.
+             Le bouton  +  ajoute au stock.
+             Le bouton  -  retire du stock.
+             Les boutons crayon et corbeille permettent de renommer
+             ou de supprimer un produit.
+
+             « Ajouter un produit » cree une nouvelle reference.
+
+             La zone de recherche filtre la liste au fur et a mesure
+             de la saisie.
+
+HISTORIQUE   Toutes les entrees et sorties de stock, de la plus
+             recente a la plus ancienne.
+
+PARAMETRES   Le seuil a partir duquel un produit est signale comme
+             « stock faible » (2 par defaut).
+
+
+VOS DONNEES
+-----------
+
+Chaque modification est enregistree immediatement : il n'y a aucun
+bouton « Sauvegarder ». Vous pouvez fermer l'application a tout
+moment, vos donnees sont conservees.
+
+Tout reste sur votre ordinateur, dans le fichier :
+
+    %APPDATA%\StockManager\stock.db
+
+Ce chemin est rappele dans la page Parametres. Pour sauvegarder
+votre inventaire, il suffit de copier ce fichier.

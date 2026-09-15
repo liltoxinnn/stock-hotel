@@ -22,6 +22,10 @@
 *.nupkg
 packages/
 
+# Livraison client générée par publish.ps1
+publish/
+GestionDeStock.zip
+
 # Base de données locale générée à l'exécution
 *.db
 *.db-shm
