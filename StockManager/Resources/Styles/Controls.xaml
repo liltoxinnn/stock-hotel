@@ -167,9 +167,13 @@
     <Style x:Key="BaseButtonStyle" TargetType="Button">
         <Setter Property="FontSize" Value="13" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Height" Value="40" />
-        <Setter Property="Padding" Value="18,0" />
+        <!-- 46 px : confortable au doigt comme à la souris -->
+        <Setter Property="Height" Value="46" />
+        <Setter Property="Padding" Value="20,0" />
         <Setter Property="Cursor" Value="Hand" />
+        <!-- L'appui est pris en compte immédiatement sur écran tactile,
+             sans attendre la détection d'un appui long. -->
+        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="False" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -239,8 +243,8 @@
 
     <!-- Bouton carré ne contenant qu'un pictogramme -->
     <Style x:Key="IconButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="Width" Value="36" />
-        <Setter Property="Height" Value="36" />
+        <Setter Property="Width" Value="46" />
+        <Setter Property="Height" Value="46" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
@@ -293,7 +297,7 @@
     <!-- ========================= Champs de saisie ======================= -->
 
     <Style x:Key="AppTextBoxStyle" TargetType="TextBox">
-        <Setter Property="Height" Value="42" />
+        <Setter Property="Height" Value="48" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
         <Setter Property="CaretBrush" Value="{StaticResource TextPrimaryBrush}" />
@@ -354,9 +358,10 @@
         <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}" />
         <Setter Property="FontSize" Value="13.5" />
         <Setter Property="FontWeight" Value="Medium" />
-        <Setter Property="Height" Value="44" />
-        <Setter Property="Margin" Value="12,2" />
+        <Setter Property="Height" Value="52" />
+        <Setter Property="Margin" Value="12,3" />
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="False" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="Template">
             <Setter.Value>
@@ -390,7 +395,7 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{StaticResource DividerBrush}" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
-        <Setter Property="Padding" Value="20,12" />
+        <Setter Property="Padding" Value="20,14" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">

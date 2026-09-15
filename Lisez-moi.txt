@@ -57,6 +57,18 @@ PARAMETRES   Le seuil a partir duquel un produit est signale comme
              « stock faible » (2 par defaut).
 
 
+PLEIN ECRAN ET ECRAN TACTILE
+----------------------------
+
+Le bouton en haut a droite passe l'application en plein ecran.
+La touche F11 fait la meme chose. Pour revenir a l'affichage
+normal : F11 ou la touche Echap.
+
+L'application s'utilise aussi bien au doigt qu'a la souris :
+les boutons sont larges, et les listes defilent en faisant
+glisser le doigt sur l'ecran.
+
+
 VOS DONNEES
 -----------
 

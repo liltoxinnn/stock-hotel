@@ -15,6 +15,7 @@ Interface entièrement en français, fonctionnement 100 % hors connexion.
 - Indicateurs : nombre de produits, total des articles, produits en stock faible
 - Seuil de stock faible configurable (2 par défaut)
 - Enregistrement automatique : chaque modification est écrite immédiatement
+- Mode plein écran (F11) et interface utilisable sur écran tactile
 
 ## Technologies
 
@@ -46,6 +47,16 @@ dotnet run --project StockManager
 Au premier démarrage, la base de données est créée automatiquement avec
 l'inventaire de départ (8 produits, 46 articles au total). Les lancements
 suivants réutilisent l'inventaire réel de l'utilisateur.
+
+## Plein écran et écran tactile
+
+`F11` bascule en plein écran (le bouton en haut à droite fait de même) ;
+`F11` ou `Échap` en sortent.
+
+L'interface est dimensionnée pour le doigt : toutes les commandes font au
+moins 46 pixels, les listes défilent en faisant glisser le doigt et l'appui
+est pris en compte sans délai. Double-taper sur une quantité permet de la
+saisir au clavier tactile.
 
 ## Emplacement des données
 

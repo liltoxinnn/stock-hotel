@@ -7,8 +7,11 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:SettingsViewModel}">
 
+    <!-- PanningMode : défilement en faisant glisser le doigt sur l'écran -->
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Disabled"
+                  PanningMode="VerticalOnly"
+                  PanningDeceleration="0.001"
                   Focusable="False">
         <StackPanel Margin="2,2,6,28" MaxWidth="620" HorizontalAlignment="Left">
 

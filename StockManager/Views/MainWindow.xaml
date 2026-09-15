@@ -11,7 +11,8 @@
         FontFamily="{StaticResource AppFontFamily}"
         Foreground="{StaticResource TextPrimaryBrush}"
         TextOptions.TextFormattingMode="Ideal"
-        UseLayoutRounding="True">
+        UseLayoutRounding="True"
+        KeyDown="OnWindowKeyDown">
 
     <Window.Resources>
         <!-- Chaque page est associée à son ViewModel -->
@@ -138,11 +139,30 @@
             </Grid.RowDefinitions>
 
             <!-- En-tête -->
-            <Border Padding="32,28,32,20">
-                <StackPanel>
-                    <TextBlock Text="{Binding PageTitle}" Style="{StaticResource HeaderTitleStyle}" />
-                    <TextBlock Text="{Binding PageSubtitle}" Style="{StaticResource HeaderSubtitleStyle}" />
-                </StackPanel>
+            <Border Padding="32,28,26,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="{Binding PageTitle}" Style="{StaticResource HeaderTitleStyle}" />
+                        <TextBlock Text="{Binding PageSubtitle}" Style="{StaticResource HeaderSubtitleStyle}" />
+                    </StackPanel>
+
+                    <Button x:Name="FullScreenButton"
+                            Grid.Column="1"
+                            Style="{StaticResource GhostIconButtonStyle}"
+                            VerticalAlignment="Center"
+                            ToolTip="Passer en plein écran (F11)"
+                            Click="OnFullScreenButtonClick">
+                        <Path x:Name="FullScreenIcon"
+                              Style="{StaticResource IconStyleMedium}"
+                              Data="{StaticResource IconFullscreen}"
+                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                    </Button>
+                </Grid>
             </Border>
 
             <!-- Page courante -->

@@ -8,8 +8,11 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:StockViewModel}">
 
+    <!-- PanningMode : défilement en faisant glisser le doigt sur l'écran -->
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Disabled"
+                  PanningMode="VerticalOnly"
+                  PanningDeceleration="0.001"
                   Focusable="False">
         <StackPanel Margin="2,2,6,28">
 
@@ -96,10 +99,10 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Grid HorizontalAlignment="Left" Width="380">
+                <Grid HorizontalAlignment="Left" Width="420">
                     <TextBox Style="{StaticResource AppTextBoxStyle}"
                              Tag="Rechercher un produit..."
-                             Padding="42,0,40,0"
+                             Padding="46,0,48,0"
                              Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                     <Path Style="{StaticResource IconStyleSmall}"
                           Data="{StaticResource IconSearch}"
@@ -108,9 +111,9 @@
                           VerticalAlignment="Center"
                           Margin="13,0,0,0" />
                     <Button Style="{StaticResource GhostIconButtonStyle}"
-                            Width="28" Height="28"
+                            Width="38" Height="38"
                             HorizontalAlignment="Right"
-                            Margin="0,0,7,0"
+                            Margin="0,0,5,0"
                             ToolTip="Effacer la recherche"
                             Command="{Binding ClearSearchCommand}"
                             Visibility="{Binding HasSearchText, Converter={StaticResource BoolToVisibility}}">
@@ -142,8 +145,8 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="190" />
-                                <ColumnDefinition Width="210" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="220" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="PRODUIT" Style="{StaticResource TableHeaderStyle}" />
                             <TextBlock Grid.Column="1"
@@ -165,8 +168,8 @@
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="190" />
-                                            <ColumnDefinition Width="210" />
+                                            <ColumnDefinition Width="200" />
+                                            <ColumnDefinition Width="220" />
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Nom du produit -->
@@ -210,12 +213,13 @@
                                             </Button>
 
                                             <!-- Double-clic : saisie de la quantité au clavier -->
-                                            <Grid Width="64"
-                                                  Height="36"
+                                            <Grid Width="72"
+                                                  Height="46"
                                                   Margin="8,0"
                                                   Background="Transparent"
                                                   Cursor="Hand"
-                                                  ToolTip="Double-cliquez pour saisir la quantité">
+                                                  Stylus.IsPressAndHoldEnabled="False"
+                                                  ToolTip="Double-cliquez (ou double-tapez) pour saisir la quantité">
                                                 <Grid.InputBindings>
                                                     <MouseBinding MouseAction="LeftDoubleClick"
                                                                   Command="{Binding DataContext.BeginEditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -232,7 +236,7 @@
                                                            Visibility="{Binding IsEditing, Converter={StaticResource InverseBoolToVisibility}}" />
 
                                                 <TextBox Style="{StaticResource AppTextBoxStyle}"
-                                                         Height="36"
+                                                         Height="46"
                                                          FontSize="15"
                                                          FontWeight="Bold"
                                                          Padding="4,0"
@@ -295,7 +299,7 @@
                                                         VerticalAlignment="Center"
                                                         Visibility="{Binding HasPendingChange, Converter={StaticResource BoolToVisibility}}">
                                                 <Button Style="{StaticResource PrimaryButtonStyle}"
-                                                        Height="36"
+                                                        Height="46"
                                                         Padding="14,0"
                                                         FontSize="12.5"
                                                         ToolTip="Enregistrer ce mouvement de stock"
